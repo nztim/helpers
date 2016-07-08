@@ -1,0 +1,25 @@
+{
+  "name": "nztim/helpers",
+  "description": "Helpers for Laravel 5",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "NZTim\\Helpers\\": "src/"
+    },
+    "files": [
+      "src/Helpers.php"
+    ]
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=4.0"
+  },
+  "authors": [
+    {
+      "name": "Tim",
+      "email": "tim@nztim.com"
+    }
+  ]
+}
