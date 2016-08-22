@@ -21,3 +21,8 @@ function autolink($content)
 {
     return preg_replace('@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', '<a target="_blank" rel="nofollow" href="$1">$1</a>', $content);
 }
+
+function markdown(string $content) : string
+{
+    return NZTim\Helpers\Markdown::instance()->render($content);
+}

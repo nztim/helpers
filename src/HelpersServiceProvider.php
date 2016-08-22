@@ -10,7 +10,6 @@ class HelpersServiceProvider extends ServiceProvider
         Blade::directive('nl2br', function($string) {
             return "<?php echo nl2br(sanitize($string)); ?>";
         });
-
         Blade::directive('autolink', function($string) {
             return "<?php echo nl2br(autolink(sanitize($string))); ?>";
         });
@@ -19,6 +18,9 @@ class HelpersServiceProvider extends ServiceProvider
         });
         Blade::directive('formerror', function($label) {
             return '<?php echo $errors->first(' . $label . ', \'<div class="alert alert-danger">:message</div>\'); ?>';
+        });
+        Blade::directive('markdown', function($string) {
+            return "<?php echo markdown(sanitize($string)); ?>";
         });
     }
 
