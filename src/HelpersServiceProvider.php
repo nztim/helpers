@@ -2,11 +2,13 @@
 
 use Blade;
 use Illuminate\Support\ServiceProvider;
+use Validator;
 
 class HelpersServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        // Blade directives ---------------------------------------------------
         Blade::directive('nl2br', function($string) {
             return "<?php echo nl2br(sanitize($string)); ?>";
         });
@@ -22,6 +24,13 @@ class HelpersServiceProvider extends ServiceProvider
         Blade::directive('markdown', function($string) {
             return "<?php echo markdown(sanitize($string)); ?>";
         });
+
+        // Common passwords validator, based on https://github.com/unicodeveloper/laravel-password
+        $validate = function($attribute, $value, $parameters, $validator) {
+            $path = realpath(__DIR__.'/../config/common-passwords.txt');
+            return !collect(explode("\n", str_replace("\r\n", "\n", file_get_contents($path))))->contains($value);
+        };
+        Validator::extend('commonpwd', $validate, 'This password is too common, please try a different one.');
     }
 
     public function register()
