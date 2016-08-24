@@ -26,3 +26,8 @@ function markdown(string $content) : string
 {
     return NZTim\Helpers\Markdown::instance()->render($content);
 }
+
+function active(string $uri)
+{
+    return request()->is($uri) ? 'active' : '';
+}
