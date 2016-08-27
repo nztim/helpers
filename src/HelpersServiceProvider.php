@@ -1,6 +1,7 @@
 <?php namespace NZTim\Helpers;
 
 use Blade;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\ServiceProvider;
 use Validator;
 
@@ -31,6 +32,13 @@ class HelpersServiceProvider extends ServiceProvider
             return !collect(explode("\n", str_replace("\r\n", "\n", file_get_contents($path))))->contains($value);
         };
         Validator::extend('commonpwd', $validate, 'This password is too common, please try a different one.');
+
+        // File extension validator -------------------------------------------
+        $validate = function($attribute, $value, $parameters, $validator) {
+            /** @var UploadedFile $value */
+            return in_array($value->extension(), $parameters);
+        };
+        Validator::extend('fileext', $validate, 'Invalid file extension');
     }
 
     public function register()
