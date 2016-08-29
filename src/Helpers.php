@@ -32,7 +32,7 @@ function active(string $uri)
     return request()->is($uri) ? 'active' : '';
 }
 
-function excerpt(string $content, int $maxLength) : string
+function excerpt(string $content, int $maxLength = 150) : string
 {
     $excerpt = str_replace(["\r", "\n"], " ", $content);
     if (strlen($excerpt) > $maxLength) {
