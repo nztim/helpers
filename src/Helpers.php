@@ -31,3 +31,15 @@ function active(string $uri)
 {
     return request()->is($uri) ? 'active' : '';
 }
+
+function excerpt(string $content, int $maxLength) : string
+{
+    $excerpt = str_replace(["\r", "\n"], " ", $content);
+    if (strlen($excerpt) > $maxLength) {
+        $excerpt = substr($excerpt, 0, $maxLength);
+        $cutoff = strrpos($excerpt, ' ');
+        $excerpt = substr($excerpt, 0, $cutoff);
+        $excerpt .= '&hellip;';
+    }
+    return $excerpt;
+}
