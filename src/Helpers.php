@@ -43,3 +43,8 @@ function excerpt(string $content, int $maxLength = 150) : string
     }
     return $excerpt;
 }
+
+function countrySelect() : array
+{
+    return include(__DIR__.DIRECTORY_SEPARATOR.'countries.php');
+}
