@@ -26,7 +26,7 @@ class HelpersServiceProvider extends ServiceProvider
             return "<?php echo markdown(sanitize($string)); ?>";
         });
         Blade::directive('json', function($data) {
-            return "<?php echo json_encode($data); ?>";
+            return "<?php echo json_encode(sanitize($data)); ?>";
         });
 
         // Common passwords validator, based on https://github.com/unicodeveloper/laravel-password
