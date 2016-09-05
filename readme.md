@@ -24,7 +24,8 @@
 Add this before the Laravel rewrite rule
 ```
 <IfModule mod_rewrite.c>
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(.+)\.(\d+)\.(css|cur|gif|ico|jpe?g|js|png|svgz?|webp)$ $1.$3 [L]
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.+)\.(\d+)\.(bmp|css|cur|gif|ico|jpe?g|js|png|svgz?|webp|webmanifest)$ $1.$3 [L]
 </IfModule>
 ```

@@ -49,11 +49,12 @@ function countrySelect() : array
     return include(__DIR__.DIRECTORY_SEPARATOR.'countries.php');
 }
 
-/* https://github.com/h5bp/server-configs-apache/blob/02a601e5914a504e019c46b76bb21adab89cb686/src/.htaccess#L677-692
+/* https://github.com/h5bp/server-configs-apache/blob/master/src/web_performance/filename-based_cache_busting.conf
  * Requires htaccess rule:
  * <IfModule mod_rewrite.c>
- *   RewriteCond %{REQUEST_FILENAME} !-f
- *   RewriteRule ^(.+)\.(\d+)\.(css|cur|gif|ico|jpe?g|js|png|svgz?|webp)$ $1.$3 [L]
+ *     RewriteEngine On
+ *     RewriteCond %{REQUEST_FILENAME} !-f
+ *     RewriteRule ^(.+)\.(\d+)\.(bmp|css|cur|gif|ico|jpe?g|js|png|svgz?|webp|webmanifest)$ $1.$3 [L]
  * </IfModule>
  */
 function cached_asset(string $asset) : string
