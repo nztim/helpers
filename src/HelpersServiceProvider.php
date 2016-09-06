@@ -36,7 +36,7 @@ class HelpersServiceProvider extends ServiceProvider
         // File extension validator -------------------------------------------
         $validate = function($attribute, $value, $parameters, $validator) {
             /** @var UploadedFile $value */
-            return in_array($value->getClientOriginalExtension(), $parameters);
+            return in_array(strtolower($value->getClientOriginalExtension()), $parameters);
         };
         Validator::extend('fileext', $validate, 'Invalid file extension');
     }
