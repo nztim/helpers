@@ -19,7 +19,7 @@ function sanitize($data)
 
 function autolink($content)
 {
-    return preg_replace('@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', '<a target="_blank" rel="nofollow" href="$1">$1</a>', $content);
+    return preg_replace("#https?://([\S]+?)#Uis", '<a target="_blank" rel="nofollow" href="http://\\1">\\1</a>', $content);
 }
 
 function markdown(string $content) : string
