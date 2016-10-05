@@ -17,9 +17,10 @@ function sanitize($data)
     return htmlspecialchars(trim($data), ENT_HTML5, 'UTF-8', false);
 }
 
-function autolink($content)
+// Matches http(s)://anything.anything until whitespace and links it
+function autolink(string $content) : string
 {
-    return preg_replace("#https?://([\S]+?)#Uis", '<a target="_blank" rel="nofollow" href="http://\\1">\\1</a>', $content);
+    return preg_replace('@https?:\/\/\S*\.\S*@i', '<a target="_blank" rel="nofollow" href="\\0">\\0</a>', $content);
 }
 
 function markdown(string $content) : string
