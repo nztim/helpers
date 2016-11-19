@@ -68,7 +68,7 @@ function cached_asset(string $asset) : string
     $extension = pathinfo($realPath, PATHINFO_EXTENSION);
     $stripped = substr($asset, 0, -(strlen($extension) + 1));
     $path = implode('.', [$stripped, $hash, $extension]);
-    return asset($path);
+    return cdn($path);
 }
 
 // Based on https://www.keycdn.com/support/laravel-cdn-integration/
