@@ -71,3 +71,16 @@ function cached_asset(string $asset) : string
     return asset($path);
 }
 
+// Based on https://www.keycdn.com/support/laravel-cdn-integration/
+function cdn(string $asset) : string
+{
+    if (app()->environment() != 'production' || !Config::get('services.cdn.enabled')) {
+        return asset($asset);
+    }
+    $cdnDomain = Config::get('services.cdn.domain');
+    // Remove query string
+    $asset = explode("?", $asset);
+    $asset = $asset[0];
+    // "//<cdnDomain>/path/to/asset.jpg"
+    return  "//" . rtrim($cdnDomain, "/") . "/" . ltrim( $asset, "/");
+}
