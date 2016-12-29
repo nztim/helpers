@@ -39,6 +39,13 @@ class HelpersServiceProvider extends ServiceProvider
             return in_array(strtolower($value->getClientOriginalExtension()), $parameters);
         };
         Validator::extend('fileext', $validate, 'Invalid file extension');
+
+        // Date after or equal validator ---------------------------------
+        $validate = function($attribute, $value, $parameters, $validator) { /** @var LaravelValidator $validator */
+            $referenceDate = array_get($validator->getData(), $parameters[0], date('Y-m-d'));
+            return strtotime($value) >= strtotime($referenceDate);
+        };
+        Validator::extend('after_or_equal', $validate, 'Invalid date');
     }
 
     public function register()
