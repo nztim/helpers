@@ -17,7 +17,7 @@ class HelpersServiceProvider extends ServiceProvider
             return "<?php echo nl2br(autolink(sanitize($string))); ?>";
         });
         Blade::directive('pagination', function($paginator) {
-            return "<?php echo with($paginator)->render(); ?>";
+            return "<?php echo with($paginator)->appends(Request::except('page'))->render(); ?>";
         });
         Blade::directive('formerror', function($label) {
             return '<?php echo $errors->first(' . $label . ', \'<div class="alert alert-danger">:message</div>\'); ?>';
