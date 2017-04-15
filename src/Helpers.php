@@ -25,7 +25,7 @@ function autolink(string $content) : string
 
 function markdown(string $content) : string
 {
-    return NZTim\Helpers\Markdown::instance()->render($content);
+    return app(Parsedown::class)->text($content);
 }
 
 function active(string $uri)

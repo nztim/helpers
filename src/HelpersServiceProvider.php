@@ -3,6 +3,7 @@
 use Blade;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\ServiceProvider;
+use Parsedown;
 use Validator;
 
 class HelpersServiceProvider extends ServiceProvider
@@ -22,8 +23,12 @@ class HelpersServiceProvider extends ServiceProvider
         Blade::directive('formerror', function($label) {
             return '<?php echo $errors->first(' . $label . ', \'<div class="alert alert-danger">:message</div>\'); ?>';
         });
+        // Parsedown is set in the container to sanitize the output.
+        // If you pre-encode, then code blocks are double-encoded, references:
+        // https://github.com/erusev/parsedown/issues/50
+        // https://github.com/erusev/parsedown/wiki/Tutorial:-Get-Started
         Blade::directive('markdown', function($string) {
-            return "<?php echo markdown(sanitize($string)); ?>";
+            return "<?php echo markdown($string); ?>";
         });
 
         // Common passwords validator, based on https://github.com/unicodeveloper/laravel-password
@@ -50,6 +55,8 @@ class HelpersServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
+        $this->app->singleton(Parsedown::class, function () {
+            return Parsedown::instance()->setMarkupEscaped(true)->setBreaksEnabled(true);
+        });
     }
 }

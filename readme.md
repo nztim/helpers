@@ -13,7 +13,7 @@
 ### Blade directives
 * `@autolink($string)` - sanitizes the string, autolinks and runs nl2br
 * `@formerror` - echoes the error message with a Boostrap-compatible red background
-* `@markdown` - sanitizes the string and then renders Markdown
+* `@markdown` - Renders markdown, HTML-escapes the content (using Parsedown)
 * `@nl2br($string)` - sanitizes the string and then runs nl2br
 * `@pagination($paginator)` - calls `render()`
 
