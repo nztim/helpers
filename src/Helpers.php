@@ -84,3 +84,9 @@ function cdn(string $asset) : string
     // "//<cdnDomain>/path/to/asset.jpg"
     return  "//" . rtrim($cdnDomain, "/") . "/" . ltrim( $asset, "/");
 }
+
+function route_force_host($name, $parameters = [])
+{
+    $base = rtrim(config('app.url'), '/');
+    return url($base . route($name, $parameters, false));
+}
