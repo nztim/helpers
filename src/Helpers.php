@@ -90,3 +90,17 @@ function route_force_host($name, $parameters = [])
     $base = rtrim(config('app.url'), '/');
     return url($base . route($name, $parameters, false));
 }
+
+/**
+ *  Check if input string is a valid YouTube URL
+ *  and try to extract the YouTube Video ID from it.
+ *  @author  Stephan Schmitz <eyecatchup@gmail.com>
+ *  @param   $url   string   The string that shall be checked.
+ *  @return  mixed           Returns YouTube Video ID, or (boolean) false.
+ */
+function parse_yturl($url): string
+{
+    $pattern = '#^(?:https?://|//)?(?:www\.|m\.)?(?:youtu\.be/|youtube\.com/(?:embed/|v/|watch\?v=|watch\?.+&v=))([\w-]{11})(?![\w-])#';
+    preg_match($pattern, $url, $matches);
+    return $matches[1] ?? '';
+}
