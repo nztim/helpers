@@ -9,7 +9,7 @@
 * `sanitize(mixed $data)` - runs htmlspecialchars() and trim() on a string or an array of strings
 * `cached_asset($path)` - returns asset path with hashed integer value, e.g. `main.css` -> `main.847389233.css`
   * Note: .htaccess rule is required, see below
-  
+
 ### Blade directives
 * `@autolink($string)` - sanitizes the string, autolinks and runs nl2br
 * `@formerror` - echoes the error message with a Boostrap-compatible red background
@@ -30,3 +30,18 @@ Add this before the Laravel rewrite rule
     RewriteRule ^(.+)\.(\d+)\.(bmp|css|cur|gif|ico|jpe?g|js|png|svgz?|webp|webmanifest)$ $1.$3 [L]
 </IfModule>
 ```
+
+### Local configuration (.env replacement)
+To use this functionality add this method override to your HTTP and Console Kernel classes:
+
+```
+protected function bootstrappers()
+{
+    return array_merge([\NZTim\Helpers\Local\Local::class], $this->bootstrappers);
+}
+```
+
+Replace your .env[.example] file with `local[.dist].php`, which uses normal config file format.
+Add `local.php` to your `.gitignore`.
+Now you can use local() in your config files in the same way that you use env() but without the downsides.
+
