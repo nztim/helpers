@@ -11,6 +11,7 @@ class HelpersServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        // ====================================================================
         // Blade directives ---------------------------------------------------
         Blade::directive('nl2br', function($string) {
             return "<?php echo nl2br(sanitize($string)); ?>";
@@ -32,6 +33,8 @@ class HelpersServiceProvider extends ServiceProvider
             return "<?php echo markdown($string); ?>";
         });
 
+        // ====================================================================
+        // Validation ---------------------------------------------------------
         // Common passwords validator, based on https://github.com/unicodeveloper/laravel-password
         $validate = function($attribute, $value, $parameters, $validator) {
             $path = realpath(__DIR__.'/../config/common-passwords.txt');
@@ -52,6 +55,10 @@ class HelpersServiceProvider extends ServiceProvider
             return strtotime($value) >= strtotime($referenceDate);
         };
         Validator::extend('after_or_equal', $validate, 'Invalid date');
+
+        // ====================================================================
+        // Commands -----------------------------------------------------------
+        $this->commands([EnvCheckCommand::class]);
     }
 
     public function register()
