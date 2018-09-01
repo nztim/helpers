@@ -7,7 +7,7 @@ class EnvCheckCommand extends Command
     protected $signature = 'envcheck';
     protected $description = 'Check .env file against .env.example';
 
-    public function handle(): int
+    public function handle()
     {
         $env = $this->transform(file_get_contents(base_path('.env')));
         $example = $this->transform(file_get_contents(base_path('.env.example')));
@@ -25,7 +25,7 @@ class EnvCheckCommand extends Command
         }
         if ($missing === [] && $extra === []) {
             $this->info('.env file check OK');
-            return 0;
+            return;
         }
         $output = [];
         foreach ($missing as $item) {
@@ -38,7 +38,6 @@ class EnvCheckCommand extends Command
         $this->error('*** WARNING ***');
         $this->error('.env check failed!');
         $this->table(['Key', 'Error'], $output);
-        return 1;
     }
 
     protected function transform(string $file): array
