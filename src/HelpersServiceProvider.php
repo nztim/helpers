@@ -3,6 +3,7 @@
 use Blade;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Validator as LaravelValidator;
 use Parsedown;
 use Validator;
 
