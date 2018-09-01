@@ -31,6 +31,9 @@ Add this before the Laravel rewrite rule
 </IfModule>
 ```
 
+### Envcheck command
+Add `php artisan envcheck` to your deploy process to enable a comparison check between `.env` and `.env.example`
+
 ### Local configuration (.env replacement)
 To use this functionality add this method override to your HTTP and Console Kernel classes:
 
