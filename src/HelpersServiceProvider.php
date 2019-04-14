@@ -1,11 +1,12 @@
 <?php namespace NZTim\Helpers;
 
-use Blade;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Validator as LaravelValidator;
 use Parsedown;
-use Validator;
 
 class HelpersServiceProvider extends ServiceProvider
 {
@@ -51,7 +52,7 @@ class HelpersServiceProvider extends ServiceProvider
 
         // Date after or equal validator ---------------------------------
         $validate = function($attribute, $value, $parameters, $validator) { /** @var LaravelValidator $validator */
-            $referenceDate = array_get($validator->getData(), $parameters[0], date('Y-m-d'));
+            $referenceDate = Arr::get($validator->getData(), $parameters[0], date('Y-m-d'));
             return strtotime($value) >= strtotime($referenceDate);
         };
         Validator::extend('after_or_equal', $validate, 'Invalid date');
