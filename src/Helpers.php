@@ -33,14 +33,14 @@ function active(string $uri)
     return request()->is($uri) ? 'active' : '';
 }
 
-function excerpt(string $content, int $maxLength = 150) : string
+function excerpt(string $content, int $max = 150, string $append = '…') : string
 {
     $excerpt = str_replace(["\r", "\n"], " ", $content);
-    if (strlen($excerpt) > $maxLength) {
-        $excerpt = substr($excerpt, 0, $maxLength);
+    if (strlen($excerpt) > $max) {
+        $excerpt = substr($excerpt, 0, $max);
         $cutoff = strrpos($excerpt, ' ');
         $excerpt = substr($excerpt, 0, $cutoff);
-        $excerpt .= '&hellip;';
+        $excerpt .= $append;
     }
     return $excerpt;
 }
