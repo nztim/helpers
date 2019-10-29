@@ -111,9 +111,8 @@ function requestInfo(): array
     $info['ip'] = request()->getClientIp();
     $info['method'] = request()->server('REQUEST_METHOD');
     $info['url'] = request()->url();
-    if (Auth::check()) {
-        $info['userid'] = Auth::user()->id;
-    }
+    $info['auth'] = auth()->check();
+    $info['authid'] = auth()->id();
     $input = request()->all();
     foreach (['password', 'password_confirmation', '_token'] as $item) {
         if (isset($input[$item])) {

@@ -2,70 +2,80 @@
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Validation\Validator as LaravelValidator;
+use Illuminate\Validation\Factory as LaravelValidator;
+use Illuminate\View\Compilers\BladeCompiler;
 use Parsedown;
 
 class HelpersServiceProvider extends ServiceProvider
 {
-    public function boot()
-    {
-        // ====================================================================
-        // Blade directives ---------------------------------------------------
-        Blade::directive('nl2br', function($string) {
-            return "<?php echo nl2br(sanitize($string)); ?>";
-        });
-        Blade::directive('autolink', function($string) {
-            return "<?php echo nl2br(autolink(sanitize($string))); ?>";
-        });
-        Blade::directive('pagination', function($paginator) {
-            return "<?php echo with($paginator)->appends(Request::except('page'))->render(); ?>";
-        });
-        Blade::directive('formerror', function($label) {
-            return '<?php echo $errors->first(' . $label . ', \'<div class="alert alert-danger">:message</div>\'); ?>';
-        });
-        // Parsedown is set in the container to sanitize the output.
-        // If you pre-encode, then code blocks are double-encoded, references:
-        // https://github.com/erusev/parsedown/issues/50
-        // https://github.com/erusev/parsedown/wiki/Tutorial:-Get-Started
-        Blade::directive('markdown', function($string) {
-            return "<?php echo markdown($string); ?>";
-        });
-
-        // ====================================================================
-        // Validation ---------------------------------------------------------
-        // Common passwords validator, based on https://github.com/unicodeveloper/laravel-password
-        $validate = function($attribute, $value, $parameters, $validator) {
-            $path = realpath(__DIR__.'/../config/common-passwords.txt');
-            return !collect(explode("\n", str_replace("\r\n", "\n", file_get_contents($path))))->contains($value);
-        };
-        Validator::extend('commonpwd', $validate, 'This password is too common, please try a different one.');
-
-        // File extension validator -------------------------------------------
-        $validate = function($attribute, $value, $parameters, $validator) {
-            /** @var UploadedFile $value */
-            return in_array(strtolower($value->getClientOriginalExtension()), $parameters);
-        };
-        Validator::extend('fileext', $validate, 'Invalid file extension');
-
-        // Date after or equal validator ---------------------------------
-        $validate = function($attribute, $value, $parameters, $validator) { /** @var LaravelValidator $validator */
-            $referenceDate = Arr::get($validator->getData(), $parameters[0], date('Y-m-d'));
-            return strtotime($value) >= strtotime($referenceDate);
-        };
-        Validator::extend('after_or_equal', $validate, 'Invalid date');
-
-        // ====================================================================
-        // Commands -----------------------------------------------------------
-        $this->commands([EnvCheckCommand::class]);
-    }
-
     public function register()
     {
         $this->app->singleton(Parsedown::class, function () {
             return Parsedown::instance()->setMarkupEscaped(true)->setBreaksEnabled(true);
         });
+    }
+
+    public function boot()
+    {
+        // Blade directives ---------------------------------------------------
+
+        $blade = app(BladeCompiler::class);
+
+        $blade->directive('nl2br', function ($string) {
+            return "<?php echo nl2br(sanitize($string)); ?>";
+        });
+
+        $blade->directive('autolink', function ($string) {
+            return "<?php echo nl2br(autolink(sanitize($string))); ?>";
+        });
+
+        $blade->directive('pagination', function ($paginator) {
+            return "<?php echo with($paginator)->appends(Request::except('page'))->render(); ?>";
+        });
+
+        $blade->directive('formerror', function ($label) {
+            return '<?php echo $errors->first(' . $label . ', \'<div class="alert alert-danger">:message</div>\'); ?>';
+        });
+
+        // Parsedown is set in the container to sanitize the output.
+        // If you pre-encode, then code blocks are double-encoded, references:
+        // https://github.com/erusev/parsedown/issues/50
+        // https://github.com/erusev/parsedown/wiki/Tutorial:-Get-Started
+        $blade->directive('markdown', function ($string) {
+            return "<?php echo markdown($string); ?>";
+        });
+
+        // Validation ---------------------------------------------------------
+
+        $laravelValidator = app(LaravelValidator::class);
+
+        // Common passwords validator, based on https://github.com/unicodeveloper/laravel-password
+        $validate = function ($attribute, $value, $parameters, $validator) {
+            $path = realpath(__DIR__ . '/../config/common-passwords.txt');
+            return !collect(explode("\n", str_replace("\r\n", "\n", file_get_contents($path))))->contains($value);
+        };
+        $laravelValidator->extend('commonpwd', $validate, 'This password is too common, please try a different one.');
+
+        // File extension validator
+        $validate = function ($attribute, $value, $parameters, $validator) {
+            /** @var UploadedFile $value */
+            return in_array(strtolower($value->getClientOriginalExtension()), $parameters);
+        };
+        $laravelValidator->extend('fileext', $validate, 'Invalid file extension');
+
+        // Date after or equal validator
+        $validate = function ($attribute, $value, $parameters, $validator) {
+            /** @var \Illuminate\Validation\Validator $validator */
+            $referenceDate = Arr::get($validator->getData(), $parameters[0], date('Y-m-d'));
+            return strtotime($value) >= strtotime($referenceDate);
+        };
+        $laravelValidator->extend('after_or_equal', $validate, 'Invalid date');
+
+        // Commands -----------------------------------------------------------
+
+        $this->commands([
+            EnvCheckCommand::class,
+        ]);
     }
 }
