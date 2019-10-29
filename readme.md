@@ -12,7 +12,7 @@
 
 ### Blade directives
 * `@autolink($string)` - sanitizes the string, autolinks and runs nl2br
-* `@formerror` - echoes the error message with a Boostrap-compatible red background
+* `@formerror` - echoes the error message with a Bootstrap-compatible red background
 * `@markdown` - Renders markdown, HTML-escapes the content (using Parsedown)
 * `@nl2br($string)` - sanitizes the string and then runs nl2br
 * `@pagination($paginator)` - calls `render()`
@@ -45,7 +45,7 @@ protected function bootstrappers()
 }
 ```
 
-Replace your .env[.example] file with `local[.dist].php`, which uses normal config file format.
-Add `local.php` to your `.gitignore`.
-Now you can use local() in your config files in the same way that you use env() but without the downsides.
+Replace your `.env[.example]` file with `local[.dist].php`, which uses normal config file format.  
+Add `local.php` to your `.gitignore`.  
+Now you can use local() in your config files in the same way that you use env() but without the downsides.  
 
