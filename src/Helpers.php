@@ -18,12 +18,12 @@ function sanitize($data)
 }
 
 // Matches http(s)://anything.anything until whitespace and links it
-function autolink(string $content) : string
+function autolink(string $content): string
 {
     return preg_replace('@https?:\/\/\S*\.\S*@i', '<a target="_blank" rel="nofollow" href="\\0">\\0</a>', $content);
 }
 
-function markdown(string $content) : string
+function markdown(string $content): string
 {
     return app(Parsedown::class)->text($content);
 }
@@ -33,7 +33,7 @@ function active(string $uri)
     return request()->is($uri) ? 'active' : '';
 }
 
-function excerpt(string $content, int $max = 150, string $append = '…') : string
+function excerpt(string $content, int $max = 150, string $append = '…'): string
 {
     $excerpt = str_replace(["\r", "\n"], " ", $content);
     if (strlen($excerpt) > $max) {
@@ -45,9 +45,9 @@ function excerpt(string $content, int $max = 150, string $append = '…') : stri
     return $excerpt;
 }
 
-function countrySelect() : array
+function countrySelect(): array
 {
-    return include(__DIR__.DIRECTORY_SEPARATOR.'countries.php');
+    return include(__DIR__ . DIRECTORY_SEPARATOR . 'countries.php');
 }
 
 /* https://github.com/h5bp/server-configs-apache/blob/master/src/web_performance/filename-based_cache_busting.conf
@@ -58,13 +58,13 @@ function countrySelect() : array
  *     RewriteRule ^(.+)\.(\d+)\.(bmp|css|cur|gif|ico|jpe?g|js|png|svgz?|webp|webmanifest)$ $1.$3 [L]
  * </IfModule>
  */
-function cached_asset(string $asset) : string
+function cached_asset(string $asset): string
 {
     $realPath = public_path($asset);
     if (!file_exists($realPath)) {
         throw new InvalidArgumentException('File not found at ' . $realPath);
     }
-    $hash = sprintf("%u",crc32(md5_file($realPath)));
+    $hash = sprintf("%u", crc32(md5_file($realPath)));
     $extension = pathinfo($realPath, PATHINFO_EXTENSION);
     $stripped = substr($asset, 0, -(strlen($extension) + 1));
     $path = implode('.', [$stripped, $hash, $extension]);
@@ -72,17 +72,17 @@ function cached_asset(string $asset) : string
 }
 
 // Based on https://www.keycdn.com/support/laravel-cdn-integration/
-function cdn(string $asset) : string
+function cdn(string $asset): string
 {
-    if (app()->environment() != 'production' || !Config::get('services.cdn.enabled')) {
+    $cdnDomain = config('services.cdn.domain');
+    if (app()->environment() != 'production' || !$cdnDomain) {
         return asset($asset);
     }
-    $cdnDomain = Config::get('services.cdn.domain');
     // Remove query string
     $asset = explode("?", $asset);
     $asset = $asset[0];
     // "//<cdnDomain>/path/to/asset.jpg"
-    return  "//" . rtrim($cdnDomain, "/") . "/" . ltrim( $asset, "/");
+    return "//" . rtrim($cdnDomain, "/") . "/" . ltrim($asset, "/");
 }
 
 function route_force_host($name, $parameters = [])
@@ -94,9 +94,9 @@ function route_force_host($name, $parameters = [])
 /**
  *  Check if input string is a valid YouTube URL
  *  and try to extract the YouTube Video ID from it.
- *  @author  Stephan Schmitz <eyecatchup@gmail.com>
- *  @param   $url   string   The string that shall be checked.
- *  @return  mixed           Returns YouTube Video ID, or (boolean) false.
+ * @param   $url   string   The string that shall be checked.
+ * @return  mixed           Returns YouTube Video ID, or (boolean) false.
+ * @author  Stephan Schmitz <eyecatchup@gmail.com>
  */
 function parse_yturl($url): string
 {
