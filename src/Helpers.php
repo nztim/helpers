@@ -23,11 +23,6 @@ function autolink(string $content): string
     return preg_replace('@https?:\/\/\S*\.\S*@i', '<a target="_blank" rel="nofollow" href="\\0">\\0</a>', $content);
 }
 
-function markdown(string $content): string
-{
-    return app(Parsedown::class)->text($content);
-}
-
 function active(string $uri)
 {
     return request()->is($uri) ? 'active' : '';

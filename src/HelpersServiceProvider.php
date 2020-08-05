@@ -5,17 +5,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Factory as LaravelValidator;
 use Illuminate\View\Compilers\BladeCompiler;
-use Parsedown;
 
 class HelpersServiceProvider extends ServiceProvider
 {
-    public function register()
-    {
-        $this->app->singleton(Parsedown::class, function () {
-            return Parsedown::instance()->setMarkupEscaped(true)->setBreaksEnabled(true);
-        });
-    }
-
     public function boot()
     {
         // Blade directives ---------------------------------------------------
@@ -36,14 +28,6 @@ class HelpersServiceProvider extends ServiceProvider
 
         $blade->directive('formerror', function ($label) {
             return '<?php echo $errors->first(' . $label . ', \'<div class="alert alert-danger">:message</div>\'); ?>';
-        });
-
-        // Parsedown is set in the container to sanitize the output.
-        // If you pre-encode, then code blocks are double-encoded, references:
-        // https://github.com/erusev/parsedown/issues/50
-        // https://github.com/erusev/parsedown/wiki/Tutorial:-Get-Started
-        $blade->directive('markdown', function ($string) {
-            return "<?php echo markdown($string); ?>";
         });
 
         // Validation ---------------------------------------------------------

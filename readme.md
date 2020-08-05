@@ -49,3 +49,6 @@ Replace your `.env[.example]` file with `local[.dist].php`, which uses normal co
 Add `local.php` to your `.gitignore`.  
 Now you can use local() in your config files in the same way that you use env() but without the downsides.  
 
+### Updating
+
+* 3.0: Removed markdown handling, replace by installing nztim/markdown
